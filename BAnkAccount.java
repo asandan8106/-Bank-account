@@ -1,5 +1,3 @@
-// BankAccount.java
-import java.util.*;
 
 public class BankAccount {
     private String accountNumber;
@@ -37,15 +35,6 @@ public class BankAccount {
             balance -= amount;
         } else {
             throw new IllegalArgumentException("Invalid withdrawal amount.");
-        }
-    }
-
-    public void transferTo(BankAccount recipient, double amount) {
-        if (amount > 0 && amount <= balance) {
-            withdraw(amount);
-            recipient.deposit(amount);
-        } else {
-            throw new IllegalArgumentException("Invalid transfer amount.");
         }
     }
 }

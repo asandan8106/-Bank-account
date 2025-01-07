@@ -1,16 +1,16 @@
-// BankAppGUI.java
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class BankAppGUI {
     private JFrame frame;
-    private JTextField accountNumberField, holderNameField, amountField;
+    private JTextField amountField;
     private JLabel balanceLabel;
     private BankAccount currentAccount;
 
-    public BankAppGUI() {
+    // Constructor to accept BankAccount
+    public BankAppGUI(BankAccount account) {
+        this.currentAccount = account; // Initialize the account
         initializeGUI();
     }
 
@@ -19,20 +19,18 @@ public class BankAppGUI {
         frame.setSize(500, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
 
-        // Account details
+        // Display account details
+        panel.add(new JLabel("Account Holder:"));
+        panel.add(new JLabel(currentAccount.getAccountHolder()));
+
         panel.add(new JLabel("Account Number:"));
-        accountNumberField = new JTextField();
-        panel.add(accountNumberField);
-
-        panel.add(new JLabel("Account Holder Name:"));
-        holderNameField = new JTextField();
-        panel.add(holderNameField);
+        panel.add(new JLabel(currentAccount.getAccountNumber()));
 
         // Balance
         panel.add(new JLabel("Current Balance:"));
-        balanceLabel = new JLabel("0.0");
+        balanceLabel = new JLabel(String.valueOf(currentAccount.getBalance()));
         panel.add(balanceLabel);
 
         // Transaction amount
@@ -41,10 +39,6 @@ public class BankAppGUI {
         panel.add(amountField);
 
         // Buttons
-        JButton createAccountButton = new JButton("Create Account");
-        createAccountButton.addActionListener(e -> createAccount());
-        panel.add(createAccountButton);
-
         JButton depositButton = new JButton("Deposit");
         depositButton.addActionListener(e -> deposit());
         panel.add(depositButton);
@@ -53,20 +47,8 @@ public class BankAppGUI {
         withdrawButton.addActionListener(e -> withdraw());
         panel.add(withdrawButton);
 
-        JButton transferButton = new JButton("Transfer");
-        transferButton.addActionListener(e -> transfer());
-        panel.add(transferButton);
-
         frame.add(panel);
         frame.setVisible(true);
-    }
-
-    private void createAccount() {
-        String accountNumber = accountNumberField.getText();
-        String holderName = holderNameField.getText();
-        currentAccount = new BankAccount(accountNumber, holderName, 0.0);
-        JOptionPane.showMessageDialog(frame, "Account Created Successfully!");
-        updateBalance();
     }
 
     private void deposit() {
@@ -91,26 +73,7 @@ public class BankAppGUI {
         }
     }
 
-    private void transfer() {
-        try {
-            double amount = Double.parseDouble(amountField.getText());
-            BankAccount recipient = new BankAccount("TEMP123", "Recipient", 0.0);
-            currentAccount.transferTo(recipient, amount);
-            JOptionPane.showMessageDialog(frame, "Transfer Successful!");
-            updateBalance();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(frame, "Error: " + e.getMessage());
-        }
-    }
-
     private void updateBalance() {
-        if (currentAccount != null) {
-            balanceLabel.setText(String.valueOf(currentAccount.getBalance()));
-        }
-    }
-
-    public static void main(String[] args) {
-        new BankAppGUI();
+        balanceLabel.setText(String.valueOf(currentAccount.getBalance()));
     }
 }
-=
